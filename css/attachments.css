@@ -1,0 +1,55 @@
+#attachments-remove
+{
+	background-color:#FA5858;
+}
+
+#attachments .top-navbar .pager{
+	position:absolute;
+	right:0px;
+	padding:4px 0px 4px 6px;
+	text-align:center;
+	margin-top:2Px;
+}
+
+#attachments-pager-next
+{
+	float:left;
+	font-size: 40px;
+    padding: 2px 5px 0px 5px;
+	cursor:pointer;
+}
+
+#attachments .top-navbar .pager .number
+{
+	float:left;
+}
+
+#attachments-pager-back
+{
+	float:left;
+	font-size: 40px;
+    padding: 2px 5px 0px 5px;
+	cursor:pointer;
+	min-width:29px;
+}
+
+#attachments .top-navbar .pager .number > div
+{
+	padding:2px;
+}
+
+.imageContainer
+{
+	position:relative;
+}
+
+.imageContainer img
+{
+	position:absolute;
+    top:0;
+    bottom:0;
+	left:0;
+	right:0;
+	margin:auto;
+	max-width:100%;
+}

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>BeWapp</title>
+<link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/css/esri.css">
+
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/icon.css">
+<link rel="stylesheet" href="css/core.css">
+<link rel="stylesheet" href="css/form.css">
+<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="css/entities.css">
+<link rel="stylesheet" href="css/poubelle.css">
+<link rel="stylesheet" href="css/search.css">
+<link rel="stylesheet" href="css/add.css">
+<link rel="stylesheet" href="css/splash.css">
+<link rel="stylesheet" href="css/attachments.css?124563">
+<link rel="stylesheet" href="css/scan.css">
+
+<link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
+		
+<script>
+        var dojoConfig = {
+            paths: { 
+					js: location.pathname.replace(/\/[^/]+$/, "") + "/js",
+					jquery: location.pathname.replace(/\/[^/]+$/, "") + "/jquery"
+				}
+        };
+</script>
+	
+<script defer src="https://js.arcgis.com/3.21/"></script>
+<script src="https://code.jquery.com/jquery-1.x-git.min.js"></script>
+		
+<script defer src="test.js">
+</script>
+</head>
+<body>
+	<div id="map">
+		<!--<div id="logout-button" class="button logout"><span class="icon logout"></span></div>-->
+		<div id="add-feature-button" class="button add"><span class="icon add"></span></div>
+		<div id="close-button" class="button close" style="display:none;"><span class="icon home"></span></div>
+		<div id="gps-button" class="button location"><span class="icon location"></span></div>
+		<div id="basemap-button" class="button basemap satellite" style="display:none;"></span></div>
+	</div>
+	<div id="search-results">
+		<div id="search-results-loader" class="sk-circle">
+		  <div class="sk-circle1 sk-child"></div>
+		  <div class="sk-circle2 sk-child"></div>
+		  <div class="sk-circle3 sk-child"></div>
+		  <div class="sk-circle4 sk-child"></div>
+		  <div class="sk-circle5 sk-child"></div>
+		  <div class="sk-circle6 sk-child"></div>
+		  <div class="sk-circle7 sk-child"></div>
+		  <div class="sk-circle8 sk-child"></div>
+		  <div class="sk-circle9 sk-child"></div>
+		  <div class="sk-circle10 sk-child"></div>
+		  <div class="sk-circle11 sk-child"></div>
+		  <div class="sk-circle12 sk-child"></div>
+		</div>
+		<div id="search-results-container">
+			<div id="search-results-container-add" class="button add">
+				Associer
+			</div>
+			<div class="clear">
+			</div>
+		</div>
+	</div>
+	
+	<div id="add-results">
+		<div class="button add">
+			Ajouter
+		</div>
+	</div>
+	
+	<div id="overlay"></div>
+	<div id="splash-overlay"></div>
+	<div id="splash" class="centerDiv">
+	</div>
+	
+	<div id="main" class="main">
+		<div id="login-form" class="login-form">
+			<div class="title">IDENTIFICATION</div>
+			<div class="input-form">
+				<input id="login-username" type="text" class="text" value="Nom d'utilisateur" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Nom d'utilisateur';}" >
+				<input id="login-password" type="password" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}">
+				<div class="submit">
+					<input id="login-button" type="button" value="CONNEXION" disabled>
+				</div>	
+				<p id="login-error"></p>
+			</div>
+		</div>
+		<div id="entities-form">
+			<div>
+			</div>
+		</div>
+		
+		<div id="scan-form" class="form">
+			<div class="top-navbar">
+				<div  id="scan-close" class="close">
+					<span class="icon close2"></span>
+				</div>
+				<div class="header">
+					<div id="scan-title" class="title">Scanner Le Code bar</div>
+					<div id="scan-subtitle" class="subtitle"></div>
+				</div>
+				<div class="pager">
+					<div class="number">
+						<div>Page</div>
+						<div id="scan-pager" class="number">1/3</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<div id="scan-wrapper-page" class="wrapper-page">
+				<div id="scan-code"></div>
+				<div id="scan-wrapper-image"><img id="scan-image"></div>
+			</div>
+			<div class="bottom-navbar">
+				<div id="scan-form-valid-button" class="button half">
+					<div class="text">CONTINUER</div>
+				</div>
+				<div id="scan-form-photo-button" class="button half red">
+					<div class="text"><span class="icon barcode"></span> SCANNER</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+
+		<div id="attachments-form" class="form">
+			<div class="top-navbar">
+				<div  id="attachments-close" class="close">
+					<span class="icon close2"></span>
+				</div>
+				<div class="header">
+					<div id="attachments-title" class="title">Prendre une photo de la poubelle</div>
+					<div id="attachments-subtitle" class="subtitle"></div>
+				</div>
+				<div class="pager">
+					<div class="number">
+						<div>Page</div>
+						<div id="attachments-pager" class="number">2/3</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<div id="attachments-wrapper-page" class="wrapper-page">
+			</div>
+			<div class="bottom-navbar">
+				<div id="attachments-form-valid-button" class="button half">
+					<div class="text">CONTINUER</div>
+				</div>
+				<div id="attachments-form-photo-button" class="button half red">
+					<div class="text"><span class="icon photo"></span> PHOTO</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+
+		<div id="validation-form" class="form">
+			<div class="top-navbar">
+				<div  id="validation-close" class="close">
+					<span class="icon close2"></span>
+				</div>
+				<div class="header">
+					<div id="validation-title" class="title">Récapitulatif</div>
+					<div id="validation-subtitle" class="subtitle"></div>
+				</div>
+				<div class="pager">
+					<div class="number">
+						<div>Page</div>
+						<div id="validation-pager" class="number">3/3</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<div id="validation-wrapper-page" class="wrapper-page">
+			</div>
+			<div id="validation-form-valid-button" class="bottom-navbar">
+				<div class="button">
+					<div class="text">VALIDER</div>
+					<div class="clear">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript" src="slick/slick.js"></script>	
+<script type="text/javascript" src="quaggaJS/dist/quagga.min.js"></script>
+</body>
+</html>

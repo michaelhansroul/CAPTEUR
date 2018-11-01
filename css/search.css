@@ -1,0 +1,32 @@
+#search-results
+{
+	display:none;
+	width:100%;
+	position:fixed;
+	bottom:0px;
+	background-color:white;
+	border-top:1px solid grey;
+	min-height:60px;
+}
+
+#search-results-loader
+{
+	position:absolute;
+	bottom:-90px;
+	left:50%;
+	margin-left:30px;
+}
+
+#search-results-container
+{
+	width:100%;
+	line-height:60px;
+}
+
+#search-results-container .button.add
+{
+	width:100%;
+	cursor:pointer;
+	text-align:center;
+	float:left;
+}

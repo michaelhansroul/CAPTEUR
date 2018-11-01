@@ -1,0 +1,40 @@
+.wrapper-form.photo
+{
+	padding:0px;
+	overflow:hidden;
+}
+.photoPage
+{
+	position:relative;
+	width:100%;
+}
+
+.photoPage .video
+{
+	width:100%;
+}
+
+.photoPage .toolbar
+{
+	position:absolute;
+	width:100%;
+	height:54px;
+	background-color:black;
+}
+
+.photoPage .toolbar img
+{
+	position:absolute;
+	top:2px;
+	left:2px;
+	height:50px;
+}
+
+.photoPage .toolbar .icon
+{
+	position:absolute;
+	top:1px;
+	font-size:3.4em;
+	margin: 0 0 0 -25px;
+	color:white;
+}

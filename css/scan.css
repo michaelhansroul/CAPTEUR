@@ -1,0 +1,18 @@
+
+
+#scan-wrapper-page{
+    text-align: center;
+    position: relative;
+}
+
+#scan-code{
+    line-height: 40px;
+    height: 40px;
+    text-align: center;
+    width: 100%;
+}
+
+#scan-wrapper-image{
+    width: 100%;
+    text-align: center;
+}

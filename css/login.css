@@ -1,0 +1,27 @@
+.login-form {
+	position:absolute;
+	width: 100%;
+	padding:0;
+	height:283px;
+	top:50%;
+	margin:-142px 0px 0px 0px;
+}
+
+.login-form .title{
+	font-size:25px;
+	color:#676767;
+	font-weight:400;
+	text-align: center;
+	padding-top:30px;
+}
+
+.input-form {
+	width: 80%;
+	margin: 0 auto;
+	padding: 20px 0 20px 0;
+}
+
+.login-form p {
+text-align: center;
+}
+

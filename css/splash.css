@@ -1,0 +1,74 @@
+.centerDiv
+{
+	position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#splash
+{
+	background-color:white;
+	z-index:10;
+	display:none;
+}
+
+#splash-overlay
+{
+	z-index:9;
+}
+
+#splash .waitContainer
+{
+	position:relative;
+	width:80px;
+	height:80px;
+}
+
+#splash .waitContainer .sk-circle
+{
+	position:absolute;
+	top:-80px;
+	left:20px;
+}
+
+
+#splash.infoContainer
+{
+	width:90%;
+	max-width:400px;
+}
+
+#splash.infoContainer .textContainer
+{
+	width:100%;
+	text-align:center;
+	padding:20px;
+}
+
+#splash.infoContainer .buttonContainer
+{
+	width:100%;
+}
+
+#splash.infoContainer .button
+{
+	width:100%;
+	text-align:center;
+	background-color:#F9B233;
+	padding:15px 0px 15px 0px;
+	color:white;
+	cursor:pointer;
+}
+
+#splash.infoContainer .demi.button
+{
+	width:50%;
+	float:left;
+}
+
+
+#splash.infoContainer .demi.button.border
+{
+	border-left:1px solid white;
+}

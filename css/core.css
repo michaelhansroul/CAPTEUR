@@ -1,0 +1,170 @@
+@font-face {
+  font-family: 'avenirnextregular';
+  src: url('../font/avenir/AvenirNextLTPro-Regular.eot');
+  src: url('../font/avenir/AvenirNextLTPro-Regular.eot?#iefix') format('embedded-opentype'),
+       url('../font/avenir/AvenirNextLTPro-Regular.woff') format('woff'),
+       url('../font/avenir/AvenirNextLTPro-Regular.ttf') format('truetype');
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.clear
+{
+	clear:both;
+}
+
+body
+{
+	background:#F7DA55;
+	font-family: avenirnextregular;
+	color:#000;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a{
+	text-decoration:none;
+}
+
+.main
+{
+	position:fixed;
+	top:0;
+	bottom:0;
+	width:500px;
+	margin:0 0 0 -250px;
+	left:50%;
+	background:#eee;
+}
+
+#map,#overlay,#splash-overlay{
+	position:fixed;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	padding: 0;
+    margin: 0;
+}
+
+#overlay,#splash-overlay{
+	background-color:rgba(0,0,0,0.5);
+}
+
+#map .button
+{
+	color:white;
+	background-color:#F9B233;
+	width:50px;
+	height:50px;
+	position:fixed;
+	right:10px;
+	top:10px;
+	-webkit-border-radius: 0.4em;
+	-o-border-radius: 0.4em;
+	-moz-border-radius: 0.4em;
+	cursor:pointer;
+	z-index:8;
+}
+
+#map .button span
+{
+	font-size:30px;
+	margin:10px 0px 0px 12px; 
+}
+
+#map .button.activate
+{
+	border:1px solid red;
+}
+
+#map .button.add
+{
+	top:65px;
+}
+
+#map .button.location
+{
+	top:120px;
+}
+
+#map .button.close
+{
+	
+}
+
+
+#map .button.basemap
+{
+	z-index:31;
+	top:auto;
+	bottom:10px;
+}
+
+#map .button.basemap.satellite
+{
+	background-image: url("https://js.arcgis.com/3.21/esri/images/basemap/satellite.jpg");
+}
+
+#map .button.basemap.streets
+{
+	background-image: url("https://js.arcgis.com/3.21/esri/images/basemap/streets.jpg");
+}
+
+/*.table
+{
+	display:table;
+}
+
+.row
+{
+	display:table-row;
+}
+
+.cell
+{
+	display:table-cell;
+	border-bottom:solid 1px #21A957;
+}*/
+
+/*div.close
+{
+	padding:10px;
+	background: #21A957;
+	color: #ECECEC;
+	box-shadow: inset 0px 0px 10px #666464;
+	-webkit-text-shadow: 0px 0px 3px #000;
+	-moz-text-shadow: 0px 0px 3px #000;
+	-o-text-shadow: 0px 0px 3px #000;
+	-ms-text-shadow: 0px 0px 3px #000;
+	font-size: 20px;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	font-weight:500;
+	border-radius: 5px;
+	height:auto;
+	width:auto;
+	display:inline;
+	float:left;
+	line-height:normal;
+}*/
+
+
+@media (max-width:500px){ 
+	.main
+	{
+		width:100%;
+		margin:0;
+		left:0;
+		right:0;
+	}
+}
+
