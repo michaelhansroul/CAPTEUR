@@ -49,13 +49,15 @@ define([
 		
 		show:function(data)
 		{
+			document.getElementById("scan-code").innerHTML = "";
+			this.code = "";
+			this.image.src = "";
+
 			this.data = data;
 			this.isShow = true;
 	
 			document.getElementById("scan-form").className = "form active";
 			this.refreshSizeImage();
-			
-			document.getElementById("scan-subtitle").innerHTML = "Association";
 		},
 		
 		hide:function(checkChange)
@@ -68,8 +70,26 @@ define([
 		
 		valid:function()
 		{
-            this.hide();
-            this.emit("next",{"next":"attachments","data":this.data});
+			if(this.code){
+				this.data["barCode"]={
+					code:this.code,
+				};
+				this.hide();
+				this.emit("next",{"next":"attachments","data":this.data});
+			}
+			else{
+				this.splashController.info({
+					"text":"Scanner un code-barres.",
+					"button":
+						{
+							"text":"OK",
+							"callback":lang.hitch(this,function(){
+								this.splashController.hide();
+							})
+						}
+					
+				});
+			}
 		},
 
 		scan:function(){
@@ -132,14 +152,14 @@ define([
 
             Quagga.decodeSingle(scanConfig, function(result) {
 				if(result && result.codeResult && result.codeResult.code) {
-					var code = result.codeResult.code;
+					self.code = result.codeResult.code;
 					var canvas = Quagga.canvas.dom.image;
-					document.getElementById("scan-code").innerHTML = code;
+					document.getElementById("scan-code").innerHTML = self.code;
 					self.image.src = canvas.toDataURL();
 					self.refreshSizeImage();
 				} else {
 					self.splashController.info({
-						"text":"Code bar non détecté.",
+						"text":"Code-barres non détecté.",
 						"button":
 							{
 								"text":"OK",

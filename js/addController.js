@@ -22,7 +22,7 @@ define([
 		activate:function()
 		{
 			this.isActivate = true;
-			document.getElementById("add-feature-button").className="button add activate";
+			document.getElementById("add-feature-button-icon").className="icon close";
 			if(this.type=="manually"){
 				this.core.searchController.activate();
 			}
@@ -31,7 +31,7 @@ define([
 		deactivate:function()
 		{
 			this.isActivate = false;
-			document.getElementById("add-feature-button").className="button add";
+			document.getElementById("add-feature-button-icon").className="icon add";
 			if(this.graphic)
 				this.core.mapController.removeGraphic(this.graphic);
 			if(this.type=="manually"){
@@ -77,7 +77,10 @@ define([
 						{
 							"text":"OUI",
 							"isEnable":true,
-							"callback":lang.hitch(this,function(){this.continue(data);})
+							"callback":lang.hitch(this,function(){
+								this.core.splashController.hide();
+								this.continue(data);
+							})
 						},
 						{"text":"NON","isEnable":true,"callback":lang.hitch(this,"cancel")}
 					]
@@ -88,6 +91,7 @@ define([
 		},
 		
 		cancel:function(){
+			this.core.splashController.hide();
 			//Deactivate add
 			if(this.isActivate)
 				this.core.activateDeactivate(null);
@@ -102,9 +106,11 @@ define([
 		addWithLocation:function()
 		{
 			this.type="location";
-			this.core.splashController.hide();
+			this.core.splashController.wait();
+			var self = this;
 			this.core.gpsController.getCurrentPosition().then(
 				lang.hitch(this,function(mapPoint){
+					this.core.splashController.hide();
 					this.core.activateDeactivate(this);
 					/*var point = new Point({
 						x: results.coords.longitude,
@@ -113,7 +119,19 @@ define([
 					this.core.mapController.map.centerAndZoom(mapPoint, 16);
 					this.addPoint(mapPoint);
 				}),
-				function(error){alert(error);}
+				function(error){
+					self.core.splashController.info({
+						"text":error,
+						"button":
+							{
+								"text":"OK",
+								"callback":lang.hitch(self,function(){
+									self.core.splashController.hide();
+								})
+							}
+						
+					});
+				}
 			);
 		},
 		
@@ -186,7 +204,7 @@ define([
 			
 			if(this.isActivate)
 			{
-				this.core.activateDeactivate(this.core.searchController);
+				this.core.activateDeactivate(null);
 			}
 		},
 		

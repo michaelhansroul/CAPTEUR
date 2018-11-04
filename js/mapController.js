@@ -67,9 +67,10 @@ define([
 			this.clear();
 			this.entity = entity;
 			this.entity.layer = new ArcGISDynamicMapServiceLayer(entity.service);
-			this.entity.layer.setVisibleLayers([entity.layerId]);
+			this.entity.layer.setVisibleLayers(entity.layerIdsOnMap);
 			var layerDefinitions = [];
-			layerDefinitions[entity.layerId] = "commune_ins_str = '"+user.ins()+"'";
+			for(var i=0;i<entity.layerIdsOnMap.length;i++)
+				layerDefinitions[entity.layerIdsOnMap[i]] = "commune_ins_str = '"+user.ins()+"'";
 			this.entity.layer.setLayerDefinitions(layerDefinitions);
 			this.entity.layer.setDisableClientCaching(true);
 			

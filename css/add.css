@@ -16,3 +16,10 @@
 	cursor:pointer;
 	text-align:center;
 }
+
+#search-results-info-container{
+	width:100%;
+	text-align:center;
+	display: none;
+	line-height: 60px;
+}

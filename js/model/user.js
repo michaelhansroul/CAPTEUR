@@ -138,6 +138,12 @@ define([
 								Config.entities[i].table.layer = new FeatureLayer(Config.entities[i].table.service);
 								Config.entities[i].table.attachmentsLayer = new FeatureLayer(Config.entities[i].table.service.replace('wss/service/ags-relay/Municipalties/agstoken/arcgis','ags'));
 							}
+
+							if(Config.entities[i].capteurBrut && Config.entities[i].capteurBrut.service)
+							{
+								Config.entities[i].capteurBrut.layer = new FeatureLayer(Config.entities[i].capteurBrut.service);
+								Config.entities[i].capteurBrut.attachmentsLayer = new FeatureLayer(Config.entities[i].capteurBrut.service.replace('wss/service/ags-relay/Municipalties/agstoken/arcgis','ags'));
+							}
 						}
 						
 						self.getIns(successCallback,errorCallback);

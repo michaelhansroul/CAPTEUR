@@ -87,12 +87,11 @@ a{
 
 #map .button.add
 {
-	top:65px;
 }
 
 #map .button.location
 {
-	top:120px;
+	top:65px;
 }
 
 #map .button.close

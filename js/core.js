@@ -60,7 +60,7 @@ function(
 			this.entitiesController = new EntitiesController();	
 			this.entitiesController.on("select",lang.hitch(this,"selectEntity"));
 
-			this.gpsController = new GpsController(this.mapController);
+			this.gpsController = new GpsController(this.mapController,this.splashController);
 			
 			this.scanController = new ScanController(this);
 			this.scanController.on("hide",lang.hitch(this,"afterHidePoubelle"));
@@ -119,7 +119,7 @@ function(
 			this.attachmentsController.initialize(entity);
 			this.validationController.initialize(entity);
 			this.hideForm();
-			this.activateDeactivate(this.searchController);
+			this.gpsController.watchPosition();
 		},
 		
 		add:function(data)

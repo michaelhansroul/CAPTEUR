@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="css/splash.css">
 <link rel="stylesheet" href="css/attachments.css?124563">
 <link rel="stylesheet" href="css/scan.css">
+<link rel="stylesheet" href="css/validation.css">
 
 <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
@@ -41,7 +42,7 @@
 <body>
 	<div id="map">
 		<!--<div id="logout-button" class="button logout"><span class="icon logout"></span></div>-->
-		<div id="add-feature-button" class="button add"><span class="icon add"></span></div>
+		<div id="add-feature-button" class="button add"><span id="add-feature-button-icon" class="icon add"></span></div>
 		<div id="close-button" class="button close" style="display:none;"><span class="icon home"></span></div>
 		<div id="gps-button" class="button location"><span class="icon location"></span></div>
 		<div id="basemap-button" class="button basemap satellite" style="display:none;"></span></div>
@@ -61,6 +62,9 @@
 		  <div class="sk-circle11 sk-child"></div>
 		  <div class="sk-circle12 sk-child"></div>
 		</div>
+		<div id="search-results-info-container">
+			Sélectionner une poubelle
+		</div>
 		<div id="search-results-container">
 			<div id="search-results-container-add" class="button add">
 				Associer
@@ -72,7 +76,7 @@
 	
 	<div id="add-results">
 		<div class="button add">
-			Ajouter
+			Ajouter le capteur
 		</div>
 	</div>
 	
@@ -104,8 +108,8 @@
 					<span class="icon close2"></span>
 				</div>
 				<div class="header">
-					<div id="scan-title" class="title">Scanner Le Code bar</div>
-					<div id="scan-subtitle" class="subtitle"></div>
+					<div id="scan-title" class="title">Scanner</div>
+					<div id="scan-subtitle" class="subtitle">Le Code-barres</div>
 				</div>
 				<div class="pager">
 					<div class="number">
@@ -137,8 +141,8 @@
 					<span class="icon close2"></span>
 				</div>
 				<div class="header">
-					<div id="attachments-title" class="title">Prendre une photo de la poubelle</div>
-					<div id="attachments-subtitle" class="subtitle"></div>
+					<div id="attachments-title" class="title">Prendre une photo</div>
+					<div id="attachments-subtitle" class="subtitle">De la poubelle</div>
 				</div>
 				<div class="pager">
 					<div class="number">
@@ -148,8 +152,8 @@
 					<div class="clear"></div>
 				</div>
 			</div>
-			
-			<div id="attachments-wrapper-page" class="wrapper-page">
+			<div id="attachments-wrapper-page" class="wrapper-page" style="text-align:center">
+					<img id="attachments-image">
 			</div>
 			<div class="bottom-navbar">
 				<div id="attachments-form-valid-button" class="button half">
@@ -169,7 +173,7 @@
 				</div>
 				<div class="header">
 					<div id="validation-title" class="title">Récapitulatif</div>
-					<div id="validation-subtitle" class="subtitle"></div>
+					<div id="validation-subtitle" class="subtitle">Validation</div>
 				</div>
 				<div class="pager">
 					<div class="number">
@@ -181,6 +185,13 @@
 			</div>
 			
 			<div id="validation-wrapper-page" class="wrapper-page">
+				<div id="validation-code"></div>
+				<div id="validation-photo">
+					<img id="validation-image">
+				</div>
+				<div id="validation-map-container">
+					<div id="validation-map"></div>
+				</div>
 			</div>
 			<div id="validation-form-valid-button" class="bottom-navbar">
 				<div class="button">

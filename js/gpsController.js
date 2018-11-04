@@ -16,11 +16,11 @@ define([
 ], function(Evented,declare,on,lang,Map,Extent,GeometryService,ProjectParameters,SpatialReference,webMercatorUtils, Point,Graphic,SimpleMarkerSymbol, config){
     return declare([Evented], {
 		 
-		constructor: function(mapController){
+		constructor: function(mapController,splashController){
 			this.mapController = mapController;
+			this.splashController = splashController;
 			this.isOk = navigator.geolocation;
 			if(this.isOk){
-				//navigator.geolocation.watchPosition(lang.hitch(this,"showLocation"), lang.hitch(this,"locationError"));
 				on(document.getElementById("gps-button"),"click",lang.hitch(this,"zoomToLocation"));
 			}
 			else
@@ -28,13 +28,24 @@ define([
 				document.getElementById("gps-button").style.display = "none";
 			}
 		},
+
+		watchPosition:function(){
+			if(this.isWatch)return;
+			this.isWatch = true;
+			if(this.isOk)
+				navigator.geolocation.watchPosition(lang.hitch(this,"showLocation"), lang.hitch(this,"locationError"));
+			else
+				this.showError("Le GPS n'est pas supporté.");	
+		},
 		
 		zoomToLocation:function()
 		{
+			this.splashController.wait();
 			this.getCurrentPosition().then(
 				lang.hitch(this,function(mapPoint){
 					this.mapController.map.centerAndZoom(mapPoint, 16);
-					var markerSymbol = new SimpleMarkerSymbol({
+					this.splashController.hide();
+					/*var markerSymbol = new SimpleMarkerSymbol({
 						color: [226, 119, 40],
 
 						outline: { // autocasts as new SimpleLineSymbol()
@@ -43,16 +54,17 @@ define([
 						}
 					  });
 
+					if(this.graphic)
+					  this.mapController.removeGraphic(this.graphic);
+				  
 					this.graphic = new Graphic();
 					this.graphic.geometry = mapPoint;
 					this.graphic.symbol = markerSymbol;
 			
-					this.mapController.addGraphic(this.graphic);
+					this.mapController.addGraphic(this.graphic);*/
 				}),
 				lang.hitch(this,function(error){
-					if (window.console && console.log) {
-						console.log(this.getErrorMessage(error));
-					}
+					this.showError(error);
 				})
 			);
 		},
@@ -64,10 +76,10 @@ define([
 				var mapPoint = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude, location.coords.latitude));
 			
 				if(this.graphic)
-					this.core.mapController.removeGraphic(this.graphic);
+					this.mapController.removeGraphic(this.graphic);
 				
 				var markerSymbol = new SimpleMarkerSymbol({
-					color: [226, 119, 40],
+					color: [226, 119, 40,64],
 
 					outline: { // autocasts as new SimpleLineSymbol()
 					  color: [255, 255, 255],
@@ -80,15 +92,12 @@ define([
 				this.graphic.symbol = markerSymbol;
 		
 				this.mapController.addGraphic(this.graphic);
-			}
-			
+			}	
 		},
 		
 		locationError:function(error)
 		{
-			if (window.console && console.log) {
-				console.log(this.getErrorMessage(error));
-			}
+			this.showError(this.getErrorMessage(error));
 		},
 		
 		getErrorMessage:function(error)
@@ -105,7 +114,7 @@ define([
 				 message = "Timeout";
 				 break;
 			   default:
-				 message = "unknown error";
+				 message = "Unknown error";
 				 break;
 			}
 			 
@@ -123,7 +132,22 @@ define([
 				}, 
 				function(error){
 					reject(self.getErrorMessage(error));
-				});
+				},
+				{maximumAge:600000, timeout:0});
+			});
+		},
+
+		showError:function(message){
+			this.splashController.info({
+				"text":"Signal GPS introuvable. ("+message+")",
+				"button":
+					{
+						"text":"OK",
+						"callback":lang.hitch(this,function(){
+							this.splashController.hide();
+						})
+					}
+				
 			});
 		}
     });
