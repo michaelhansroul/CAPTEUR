@@ -34,6 +34,7 @@ define([
 			this.image.src = "";
 			this.src = "";
 			this.form = "";
+			this.file = null;
 			this.refreshSizeImage();
 			document.getElementById("attachments-form").className = "form active";
 			//document.getElementById("scan-title").innerHTML = this.entity.name;
@@ -77,6 +78,7 @@ define([
 						//self.addLocalImage(fr.result,formElement);
 						self.src = URL.createObjectURL(files[0]);
 						self.form = formElement;
+						self.file = files[0];
 						self.image.src=self.src;
 						self.refreshSizeImage();
 						self.splashController.hide();
@@ -108,7 +110,8 @@ define([
 			if(this.form){
 				this.data["attachment"]={
 					formElement:this.form,
-					src:this.src
+					src:this.src,
+					file:this.file
 				};
 				this.hide();
 				this.emit("next",{"next":"validation","data":this.data});

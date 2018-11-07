@@ -17,7 +17,8 @@ define([
 	"esri/symbols/SimpleMarkerSymbol",
 	"js/model/poubelle",
 	"js/model/capteur",
-	"js/model/capteurBrut"
+	"js/model/capteurBrut",
+	"js/model/capteurThingsplay"
 ], function(Evented,declare,on,lang,config,Graphic,Map,ArcGISDynamicMapServiceLayer,
 	ArcGISTiledMapServiceLayer,
 	VectorTileLayer,
@@ -26,7 +27,7 @@ define([
 	ProjectParameters,
 	SpatialReference,
 	Graphic,
-	SimpleMarkerSymbol,Poubelle,Capteur,CapteurBrut){
+	SimpleMarkerSymbol,Poubelle,Capteur,CapteurBrut,CapteurThingsplay){
     return declare([Evented], {
 		isShow:false,
 		constructor: function(core){
@@ -107,6 +108,7 @@ define([
 		valid:function()
 		{
 			this.splashController.wait();
+			var capteurThingsplay = new CapteurThingsplay(this.entity,this.data,this.user);
 			if(this.data.type=="update"){
 				//ASSOCIATION
 				var poubelle = new Poubelle(this.entity,this.data,this.user);
@@ -122,9 +124,14 @@ define([
 									promise  = capteur.update();
 								promise.then(
 									lang.hitch(this,function(){
-										this.entity.layer.refresh();
-										this.splashController.hide();
-										this.hide();
+										capteurThingsplay.add().then(
+											lang.hitch(this,function(){
+												this.entity.layer.refresh();
+												this.splashController.hide();
+												this.hide();
+											}),
+											lang.hitch(this,function(error){alert(error);})
+										);
 									}),
 									lang.hitch(this,function(error){alert(error);})
 								);
@@ -146,9 +153,14 @@ define([
 						this.data.capteurBrut.attributes[capteurBrut.OIDName()] = this.getValueByFieldName(result[0],capteurBrut.OIDName());
 						capteurBrut.addAttachment().then(
 							lang.hitch(this,function(result){
-								this.entity.layer.refresh();
-								this.splashController.hide();
-								this.hide();
+								capteurThingsplay.add().then(
+									lang.hitch(this,function(){
+										this.entity.layer.refresh();
+										this.splashController.hide();
+										this.hide();
+									}),
+									lang.hitch(this,function(error){alert(error);})
+								);
 							}),
 							lang.hitch(this,function(error){alert(error);})
 						);
