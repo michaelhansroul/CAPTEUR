@@ -13,7 +13,8 @@ define([
 	"esri/graphic",
 	"esri/symbols/SimpleMarkerSymbol",
 	"js/config",
-], function(Evented,declare,on,lang,Map,Extent,GeometryService,ProjectParameters,SpatialReference,webMercatorUtils, Point,Graphic,SimpleMarkerSymbol, config){
+	"esri/config"
+], function(Evented,declare,on,lang,Map,Extent,GeometryService,ProjectParameters,SpatialReference,webMercatorUtils, Point,Graphic,SimpleMarkerSymbol, config,esriConfig){
     return declare([Evented], {
 		 
 		constructor: function(mapController,splashController){
@@ -43,7 +44,7 @@ define([
 			this.splashController.wait();
 			this.getCurrentPosition().then(
 				lang.hitch(this,function(mapPoint){
-					this.mapController.map.centerAndZoom(mapPoint, 16);
+					this.mapController.map.centerAndZoom(mapPoint, 14);
 					this.splashController.hide();
 					/*var markerSymbol = new SimpleMarkerSymbol({
 						color: [226, 119, 40],
@@ -74,24 +75,37 @@ define([
 			if(this.mapController.map.loaded)
 			{
 				var mapPoint = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude, location.coords.latitude));
-			
-				if(this.graphic)
-					this.mapController.removeGraphic(this.graphic);
 				
-				var markerSymbol = new SimpleMarkerSymbol({
-					color: [226, 119, 40,64],
+				//TODO TRANSFORM TO LAMBERT 72 313700
+				//new SpatialReference(102100);
 
-					outline: { // autocasts as new SimpleLineSymbol()
-					  color: [255, 255, 255],
-					  width: 2
-					}
-				  });
+				var geomSer = esriConfig.geometryService;
+				var params = new ProjectParameters();
+				params.geometries = [mapPoint];
+				//params.geometries = [new Point(location.coords.longitude, location.coords.latitude,new SpatialReference(4326))];
+				params.outSR  = new SpatialReference(31370);
+				//params.transformForward=false;
+				//params.transformation = {"wkid":1610};
+				geomSer.project(params).then( lang.hitch(this,function(result){
+					mapPoint = result[0];
+					if(this.graphic)
+						this.mapController.removeGraphic(this.graphic);
+				
+					var markerSymbol = new SimpleMarkerSymbol({
+						color: [226, 119, 40,64],
 
-				this.graphic = new Graphic();
-				this.graphic.geometry = mapPoint;
-				this.graphic.symbol = markerSymbol;
-		
-				this.mapController.addGraphic(this.graphic);
+						outline: { // autocasts as new SimpleLineSymbol()
+						color: [255, 255, 255],
+						width: 2
+						}
+					});
+
+					this.graphic = new Graphic();
+					this.graphic.geometry = mapPoint;
+					this.graphic.symbol = markerSymbol;
+			
+					this.mapController.addGraphic(this.graphic);
+				}));
 			}	
 		},
 		
@@ -127,8 +141,22 @@ define([
 			return new Promise(function(resolve, reject) {
 				navigator.geolocation.getCurrentPosition(
 				function(location){
-					var pt = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude, location.coords.latitude));
-					resolve(pt);
+					var mapPoint = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude,location.coords.latitude)); 
+
+					var geomSer = esriConfig.geometryService;
+					var params = new ProjectParameters();
+					params.geometries = [mapPoint];
+					params.outSR  = new SpatialReference(31370);
+					//params.transformForward;
+					//params.transformation = transformation;
+					geomSer.project(params).then( lang.hitch(this,
+						function(result){
+							resolve(result[0]);
+						}),
+						lang.hitch(this,function(error){reject(error);})
+					);
+
+					
 				}, 
 				function(error){
 					reject(self.getErrorMessage(error));

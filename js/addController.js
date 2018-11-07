@@ -116,7 +116,7 @@ define([
 						x: results.coords.longitude,
 						y: results.coords.latitude
 					  });*/
-					this.core.mapController.map.centerAndZoom(mapPoint, 16);
+					this.core.mapController.map.centerAndZoom(mapPoint, 14);
 					this.addPoint(mapPoint);
 				}),
 				function(error){

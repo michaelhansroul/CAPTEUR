@@ -37,12 +37,14 @@ define([
 		constructor: function(splashController){
 			this.splashController = splashController;
 			
-			this.map = new Map("map",{
-				basemap: "satellite"
-			});
+			this.map = new Map("map");
 			
-			var vtlayer = new VectorTileLayer("https://www.arcgis.com/sharing/rest/content/items/af6063d6906c4eb589dfe03819610660/resources/styles/root.json");
-			this.map.addLayer(vtlayer);
+			//var ortholayer = new VectorTileLayer("https://www.arcgis.com/sharing/rest/content/items/af6063d6906c4eb589dfe03819610660/resources/styles/root.json");
+			var orthoLayer = new ArcGISTiledMapServiceLayer("https://geoservices.wallonie.be/arcgis/rest/services/IMAGERIE/ORTHO_LAST/MapServer");
+			var labelLayer = new ArcGISTiledMapServiceLayer("https://geoservices.wallonie.be/arcgis/rest/services/DONNEES_BASE/FOND_PLAN_ANNOTATIONS_RW/MapServer");
+          
+			this.map.addLayer(orthoLayer);
+			this.map.addLayer(labelLayer);
 			
 			this.map.on("click", lang.hitch(this,function(event){
 				 this.emit("click",event.mapPoint);
@@ -79,7 +81,7 @@ define([
 			
 			var extent  =  user.geometry().getExtent();
 			
-			var outSR =  new SpatialReference(102100);//SpatialReference.WebMercator;
+			/*var outSR =  new SpatialReference(102100);//SpatialReference.WebMercator;
 			
 			var geomSer = esriConfig.geometryService;//new GeometryService( esriConfig.geometryServiceUrl );
 			var params = new ProjectParameters();
@@ -89,7 +91,9 @@ define([
 			//params.transformation = transformation;
 			geomSer.project(params).then( lang.hitch(this,function(event){
 				this.map.setExtent(event[0]);
-			}));
+			}));*/
+
+			this.map.setExtent(extent);
 		},
 		
 		track:function(track)

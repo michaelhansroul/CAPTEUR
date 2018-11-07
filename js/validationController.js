@@ -39,12 +39,12 @@ define([
 			on(document.getElementById("validation-close"), "click", lang.hitch(this, "hide"));
 			on(document.getElementById("validation-form-valid-button"), "click", lang.hitch(this, "valid"));
 
-			this.map = new Map("validation-map",{
-				basemap: "satellite"
-			});
-			
-			var vtlayer = new VectorTileLayer("https://www.arcgis.com/sharing/rest/content/items/af6063d6906c4eb589dfe03819610660/resources/styles/root.json");
-			this.map.addLayer(vtlayer);
+			this.map = new Map("validation-map");
+			var orthoLayer = new ArcGISTiledMapServiceLayer("https://geoservices.wallonie.be/arcgis/rest/services/IMAGERIE/ORTHO_LAST/MapServer");
+			var labelLayer = new ArcGISTiledMapServiceLayer("https://geoservices.wallonie.be/arcgis/rest/services/DONNEES_BASE/FOND_PLAN_ANNOTATIONS_RW/MapServer");
+          
+			this.map.addLayer(orthoLayer);
+			this.map.addLayer(labelLayer);
 
 			on(window, 'resize', lang.hitch(this, "resize"));
 			this.resize();
@@ -79,7 +79,7 @@ define([
 			  });
 
 			this.map.graphics.add(this.graphic);
-			this.map.centerAndZoom(this.data.feature.geometry, 16);
+			this.map.centerAndZoom(this.data.feature.geometry, 14);
 		},
 
 		resize:function(){

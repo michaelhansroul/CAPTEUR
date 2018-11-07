@@ -167,7 +167,7 @@ define([
 				{
 					this.insFeature = results.features[0];
 					var geomSer = esriConfig.geometryService;//new GeometryService( esriConfig.geometryServiceUrl );
-					var params = new ProjectParameters();
+					/*var params = new ProjectParameters();
 					params.geometries = [this.insFeature.geometry];
 					params.outSR  = new SpatialReference(102100);
 					//params.transformForward;
@@ -177,7 +177,8 @@ define([
 						successCallback();
 					}),
 					lang.hitch(this,function(error){errorCallback("Project ins error");})
-					);
+					);*/
+					successCallback();
 				}
 				else
 				{
