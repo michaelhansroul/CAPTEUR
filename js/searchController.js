@@ -227,7 +227,7 @@ define([
 			document.getElementById("search-results-info-container").style.display = "block";
 		},
 
-		hideInfo(){
+		hideInfo:function(){
 			document.getElementById("search-results-info-container").style.display = "none";
 		},
 		
