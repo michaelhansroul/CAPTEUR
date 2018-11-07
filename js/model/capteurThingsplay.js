@@ -33,6 +33,8 @@ define([
 		
 		add: function(){
 			return new Promise(lang.hitch(this,function(resolve, reject){
+				resolve();
+				return;
 				var capteurIdElement = document.createElement("input");
 				capteurIdElement.type = "hidden";
 				capteurIdElement.name = "capteurId";
