@@ -46,7 +46,7 @@ define([
 				var formData = new FormData(this.data.attachment.formElement);
 				//formData.append('file', this.data.attachment.file);
 				$.ajax({
-					url: "addPhotoToThingsplay.ashx",
+				    url: "thingsplay.ashx",
 					type: "POST",
 					data: formData,
 					processData: false,
