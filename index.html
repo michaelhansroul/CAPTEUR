@@ -40,6 +40,15 @@
 </script>
 </head>
 <body>
+<form id="formBarcode" method="post" enctype="multipart/form-data">
+	<input id="fileBarcode" type="file" name="attachment" accept="image/*" capture="true">
+	<input type="hidden" name="f" value="json">
+</form>
+<form id="formAttachment" method="post" enctype="multipart/form-data">
+	<input id="fileAttachment" type="file" name="attachment" accept="image/*" capture="true">
+	<input type="hidden" name="f" value="json">
+</form>
+
 	<div id="map">
 		<!--<div id="logout-button" class="button logout"><span class="icon logout"></span></div>-->
 		<div id="add-feature-button" class="button add"><span id="add-feature-button-icon" class="icon add"></span></div>

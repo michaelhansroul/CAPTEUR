@@ -43,7 +43,7 @@ define([
 		photo:function(){
 			var self = this;
 			
-			var formElement = document.createElement("form");
+			/*var formElement = document.createElement("form");
 			formElement.enctype = "multipart/form-data";
 			formElement.method = "post";
 			
@@ -56,12 +56,16 @@ define([
 			formElement.appendChild(fileElement);
 			
 			var fileJson = document.createElement("input");
+			fileJson.type = "hidden";
 			fileJson.name = "f";
 			fileJson.value = "json";
 			
 			formElement.appendChild(fileJson);
 			
-			document.body.appendChild(formElement);
+			document.body.appendChild(formElement);*/
+
+			var formElement = document.getElementById("formAttachment");
+			var fileElement = document.getElementById("fileAttachment");
 			
 			on(fileElement,"click",lang.hitch(this,function(files){
 				fileElement.value = null;

@@ -33,23 +33,18 @@ define([
 		
 		add: function(){
 			return new Promise(lang.hitch(this,function(resolve, reject){
-				resolve();
-				return;
-				var capteurIdElement = document.createElement("input");
-				capteurIdElement.type = "hidden";
-				capteurIdElement.name = "capteurId";
-				capteurIdElement.value = this.data.barCode.code;
-				this.data.attachment.formElement.appendChild(capteurIdElement);
-				var locationElement = document.createElement("input");
-				locationElement.type = "hidden";
-				locationElement.name = "location";
-				locationElement.value = this.data.feature.geometry.x+";"+this.data.feature.geometry.y;
-				this.data.attachment.formElement.appendChild(locationElement);
-				var formData = new FormData(this.data.attachment.formElement);
-				//formData.append('file', this.data.attachment.file);
+				//resolve();
+				//return;
+				var formData = new FormData(/*this.data.attachment.formElement*/);
+				formData.append('file', this.data.attachment.file);
+				var mapPoint = this.data.feature.geometry;
 				$.ajax({
 				    url: "thingsplay.ashx",
 					type: "POST",
+					headers: {
+						'Device-ID':this.data.barCode.code,
+						'Device-Loc':mapPoint.x.toString().replace(".",",")+";"+mapPoint.y.toString().replace(".",",")
+					},
 					data: formData,
 					processData: false,
 					contentType: false,

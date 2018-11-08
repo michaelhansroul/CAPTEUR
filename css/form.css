@@ -1,3 +1,7 @@
+#formBarcode, #formAttachment {
+	display: none;
+}
+
 .form {
 	position:relative;
 	display:none;
