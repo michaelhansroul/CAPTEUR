@@ -1,4 +1,4 @@
-#formBarcode, #formAttachment {
+#formBarcode, #formAttachment, #fileBarcode, #fileAttachment {
 	display: none;
 }
 

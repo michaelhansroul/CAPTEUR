@@ -43,20 +43,20 @@ public class thingsplay : IHttpHandler
 
         try
         {
-            String capteurId = context.Request.Form["capteurId"];
+            String capteurId = context.Request.Headers["Device-ID"];
             if (String.IsNullOrEmpty(capteurId))
                 throw new Exception("capteurId can't be null");
 
-            String location = context.Request.Form["location"];
+            String location = context.Request.Headers["Device-Loc"];
             if (String.IsNullOrEmpty(location))
                 throw new Exception("location can't be null");
 
-            HttpPostedFile hpf = context.Request.Files["attachment"] as HttpPostedFile;
+            HttpPostedFile hpf = context.Request.Files["file"] as HttpPostedFile;
             if(hpf==null)
-                throw new Exception("attachment can't be null");
+                throw new Exception("file can't be null");
             
             if (hpf.ContentLength == 0)
-                throw new Exception("attachment content lenght == 0");
+                throw new Exception("file content lenght == 0");
             
             //string savedFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,Path.GetFileName(hpf.FileName));
             //hpf.SaveAs(savedFileName);
