@@ -40,7 +40,8 @@ function(
 	esriConfig,
 	GeometryService
 	){
-	return declare(null, {
+    return declare(null, {
+        numOfWorkers:0,
 		constructor: function(core){
 			
 			esriConfig.geometryService = new GeometryService("https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
@@ -80,6 +81,11 @@ function(
 			this.addController.on("update",lang.hitch(this,"update"));
 			
 			on(document.getElementById("close-button"), "click", lang.hitch(this, "closeMap"));
+
+			navigator.getHardwareConcurrency(lang.hitch(this, function () {
+			    this.numOfWorkers = navigator.hardwareConcurrency;
+			    //alert(this.numOfWorkers);
+			}));
 		},
 		
 		closeMap:function()

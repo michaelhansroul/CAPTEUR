@@ -1,7 +1,7 @@
 
 var scanConfig = {
-	inputStream: {
-		size: 800,
+    inputStream: {
+        size: 800,
 		singleChannel: false
 	},
 	locator: {
@@ -10,8 +10,8 @@ var scanConfig = {
 	},
 	decoder: {
 		readers: [{
-			format: "code_128_reader",
-			config: {}
+		    format: "code_128_reader",
+		    config: {}
 		}]
 	},
 	locate: true,
@@ -27,7 +27,11 @@ define([
 	"esri/graphic"
 ], function(Evented,declare,on,lang,config,Graphic){
     return declare([Evented], {
-		isShow:false,
+        isShow: false,
+        patchSizeList: ['medium','x-small', 'small', 'large', 'x-large'],
+        sizeList: [800,320, 640, 1280, 1600, 1900],
+        indexPatchSize: 0,
+        indexSizeList: 0,
 		constructor: function(core){
 			this.core = core;
 			this.splashController = this.core.splashController;
@@ -39,7 +43,14 @@ define([
 			//on(window, 'resize', lang.hitch(this, "refresh"));
 			on(document.getElementById("scan-close"), "click", lang.hitch(this, "hide",true));
 			on(document.getElementById("scan-form-valid-button"), "click", lang.hitch(this, "valid"));
-			on(document.getElementById("scan-form-photo-button"), "click", lang.hitch(this, "scan"));
+		    on(document.getElementById("scan-form-photo-button"), "click", lang.hitch(this, "scan"));
+
+			var self = this;
+			$(document.getElementById("fileBarcode")).on("change", function (e) {
+			    if (e.target.files && e.target.files.length) {
+			        self.decode(URL.createObjectURL(e.target.files[0]));
+			    }
+			});
 		},
 		
 		initialize:function(entity)
@@ -93,7 +104,9 @@ define([
 		},
 
 		scan:function(){
-			var self = this;
+		    var self = this;
+		    this.indexPatchSize = 0;
+		    this.indexSizeList = 0;
 			
 			/*var formElement = document.createElement("form");
 			formElement.enctype = "multipart/form-data";
@@ -116,50 +129,44 @@ define([
 			
 			document.body.appendChild(formElement);*/
 			var fileElement = document.getElementById("fileBarcode");
-			
-			on(fileElement,"click",lang.hitch(this,function(files){
-				fileElement.value = null;
-			}));
-			
-			on(fileElement,"change",lang.hitch(this,function(evt){
-				var tgt = evt.target || window.event.srcElement,
-				files = tgt.files;
-				// FileReader support
-				if (FileReader && files && files.length) {
-					var fr = new FileReader();
-					self.splashController.wait();
-					fr.onload = function () {
-						//self.addLocalImage(fr.result,formElement);
-						self.decode(URL.createObjectURL(files[0]));
-						self.splashController.hide();
-					}
-					fr.readAsDataURL(files[0]);
-				}
-
-				// Not supported
-				else {
-					// fallback -- perhaps submit the input to an iframe and temporarily store
-					// them on the server until the user's session ends.
-				}
-			}));
-			
 			fileElement.click();
 			event.preventDefault();
+			this.splashController.wait();
 		},
 
-		decode: function(src) {
+		decode: function (src) {
+		    console.log("Decode:" + this.patchSizeList[this.indexPatchSize]);
             var self = this;
 
-			scanConfig.src = src;
+            scanConfig.numOfWorkers = this.core.numOfWorkers;
+            scanConfig.locator.patchSize = this.patchSizeList[this.indexPatchSize];
+            scanConfig.inputStream.size = this.sizeList[this.indexSize];
 
-            Quagga.decodeSingle(scanConfig, function(result) {
+            var config = $.extend({}, scanConfig, { src: src });
+
+            Quagga.decodeSingle(config, function (result) {
 				if(result && result.codeResult && result.codeResult.code) {
 					self.code = result.codeResult.code;
 					var canvas = Quagga.canvas.dom.image;
 					document.getElementById("scan-code").innerHTML = self.code;
 					self.image.src = canvas.toDataURL();
 					self.refreshSizeImage();
+					self.splashController.hide();
 				} else {
+				    self.indexPatchSize++;
+				    if (self.indexPatchSize < self.patchSizeList.length)
+				    {
+				        self.decode(src);
+				        return;
+				    }
+
+				    self.indexPatchSize = 0;
+				    self.indexSizeList++;
+				    if (self.indexSizeList < self.sizeList.length) {
+				        self.decode(src);
+				        return;
+				    }
+
 					self.splashController.info({
 						"text":"Code-barres non détecté.",
 						"button":
