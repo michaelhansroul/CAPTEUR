@@ -130,16 +130,16 @@ define([
 												this.splashController.hide();
 												this.hide();
 											}),
-											lang.hitch(this,function(error){alert(error);})
+											lang.hitch(this,function(error){this.showError(error);})
 										);
 									}),
-									lang.hitch(this,function(error){alert(error);})
+									lang.hitch(this,function(error){this.showError(error);})
 								);
 							}),
-							lang.hitch(this,function(error){alert(error);})
+							lang.hitch(this,function(error){this.showError(error);})
 						);
 					}),
-					lang.hitch(this,function(error){alert(error);})
+					lang.hitch(this,function(error){this.showError(error);})
 				);
 			}
 			else{
@@ -159,13 +159,13 @@ define([
 										this.splashController.hide();
 										this.hide();
 									}),
-									lang.hitch(this,function(error){alert(error);})
+									lang.hitch(this,function(error){this.showError(error);})
 								);
 							}),
-							lang.hitch(this,function(error){alert(error);})
+							lang.hitch(this,function(error){this.showError(error);})
 						);
 					}),
-					lang.hitch(this,function(error){alert(error);})
+					lang.hitch(this,function(error){this.showError(error);})
 				);
 			}
 		},
@@ -181,6 +181,39 @@ define([
 			}
 			
 			return null;
+		},
+
+		showError:function(error){
+			var message;
+			if(!error)
+				message = "Erreur inconnue";
+			else{
+				message = error.toString();
+				if(this.isObject(error)){
+					if(error.message)
+						message = error.message;
+					else if(error.msg)
+						message = error.msg;
+				}
+
+			}
+
+			this.splashController.info({
+				"text":"Sauvegarde erreur. ("+message+")",
+				"button":
+					{
+						"text":"OK",
+						"callback":lang.hitch(this,function(){
+							this.splashController.hide();
+						})
+					}
+				
+			});
+		},
+
+		isObject:function(val) {
+			if (val === null) { return false;}
+			return ( (typeof val === 'function') || (typeof val === 'object') );
 		}
     });
 });

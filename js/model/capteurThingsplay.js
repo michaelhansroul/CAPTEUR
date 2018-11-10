@@ -14,7 +14,8 @@ define([
 	"esri/tasks/ProjectParameters",
 	"esri/SpatialReference",
 	"esri/graphic",
-	"esri/symbols/SimpleMarkerSymbol"
+	"esri/symbols/SimpleMarkerSymbol",
+	"esri/config"
 ], function(Evented,declare,on,lang,config,Graphic,Map,ArcGISDynamicMapServiceLayer,
 	ArcGISTiledMapServiceLayer,
 	VectorTileLayer,
@@ -23,7 +24,7 @@ define([
 	ProjectParameters,
 	SpatialReference,
 	Graphic,
-	SimpleMarkerSymbol){
+	SimpleMarkerSymbol,esriConfig){
     return declare([Evented], {
 		constructor: function(entity,data,user){
 			this.user = user;
@@ -35,27 +36,40 @@ define([
 			return new Promise(lang.hitch(this,function(resolve, reject){
 				//resolve();
 				//return;
-				var formData = new FormData(/*this.data.attachment.formElement*/);
-				formData.append('file', this.data.attachment.file);
+
 				var mapPoint = this.data.feature.geometry;
-				$.ajax({
-				    url: "thingsplay.ashx",
-					type: "POST",
-					headers: {
-						'Device-ID':this.data.barCode.code,
-						'Device-Loc':mapPoint.x.toString().replace(".",",")+";"+mapPoint.y.toString().replace(".",",")
-					},
-					data: formData,
-					processData: false,
-					contentType: false,
-					success: function (res) {
-						resolve();
-					},
-					error:function(error){
-						reject(error);
-					}
-				});
-				
+				var geomSer = esriConfig.geometryService;
+				var params = new ProjectParameters();
+				params.geometries = [mapPoint];
+				params.outSR  = new SpatialReference(4326);
+				params.transformForward = true;
+				params.transformation = {"wkid":1610};
+				geomSer.project(params).then( lang.hitch(this,
+					function(result){
+						mapPoint = result[0];
+						var formData = new FormData(/*this.data.attachment.formElement*/);
+						formData.append('file', this.data.attachment.file);
+						
+						$.ajax({
+							url: "http://ecms.ugr.be:8080/bewapp/add-details",
+							type: "POST",
+							headers: {
+								'Device-ID':'000000000000001',//this.data.barCode.code,
+								'Device-Loc':mapPoint.y.toString().replace(".",",")+";"+mapPoint.x.toString().replace(".",",")
+							},
+							data: formData,
+							processData: false,
+							contentType: false,
+							success: function (res) {
+								resolve();
+							},
+							error:function(error){
+								reject(error);
+							}
+						});
+					}),
+					lang.hitch(this,function(error){reject(error);})
+				);				
 			}));
 		}
     });

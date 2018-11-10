@@ -126,6 +126,21 @@ function(
 			this.validationController.initialize(entity);
 			this.hideForm();
 			this.gpsController.watchPosition();
+			this.zoomToLocation();
+		},
+
+		zoomToLocation:function(){
+			this.splashController.wait();
+			this.gpsController.getCurrentPosition().then(
+				lang.hitch(this,function(mapPoint){
+					if(this.loginController.user.geometry().contains(mapPoint))
+						this.mapController.map.centerAndZoom(mapPoint, 14);
+					this.splashController.hide();
+				}),
+				lang.hitch(this,function(error){
+					this.gpsController.showError(error);
+				})
+			);
 		},
 		
 		add:function(data)

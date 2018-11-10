@@ -46,23 +46,6 @@ define([
 				lang.hitch(this,function(mapPoint){
 					this.mapController.map.centerAndZoom(mapPoint, 14);
 					this.splashController.hide();
-					/*var markerSymbol = new SimpleMarkerSymbol({
-						color: [226, 119, 40],
-
-						outline: { // autocasts as new SimpleLineSymbol()
-						  color: [255, 255, 255],
-						  width: 2
-						}
-					  });
-
-					if(this.graphic)
-					  this.mapController.removeGraphic(this.graphic);
-				  
-					this.graphic = new Graphic();
-					this.graphic.geometry = mapPoint;
-					this.graphic.symbol = markerSymbol;
-			
-					this.mapController.addGraphic(this.graphic);*/
 				}),
 				lang.hitch(this,function(error){
 					this.showError(error);
@@ -155,13 +138,11 @@ define([
 						}),
 						lang.hitch(this,function(error){reject(error);})
 					);
-
-					
 				}, 
 				function(error){
 					reject(self.getErrorMessage(error));
 				},
-				{maximumAge:600000, timeout:0});
+				{maximumAge:60000, timeout:5000, enableHighAccuracy:false});
 			});
 		},
 

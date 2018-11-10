@@ -184,7 +184,6 @@ define([
 
 		refreshSizeImage:function()
 		{
-			
 			var height = this.container.offsetHeight - 54*2 - 20;
 			var width = this.container.offsetWidth;
 
