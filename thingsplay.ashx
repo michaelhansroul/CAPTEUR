@@ -60,10 +60,26 @@ public class thingsplay : IHttpHandler
             
             //string savedFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,Path.GetFileName(hpf.FileName));
             //hpf.SaveAs(savedFileName);
-            
+
+            using (WebClientWithResponse client = new WebClientWithResponse())
+            {
+                client.Headers.Add("Content-Type", "application/octet-stream");
+                client.Headers.Add("Device-ID", config.Test ? "000000000000001" : capteurId);
+                client.Headers.Add("Device-Loc", location);
+
+                using (Stream fileStream = hpf.InputStream)
+                using (Stream requestStream = client.OpenWrite(new Uri(config.url), "POST"))
+                {
+                    fileStream.CopyTo(requestStream);
+                }
+
+                byte[] bytes = client.Response;
+                response.BinaryWrite(bytes);
+                return;
+            }
             
 
-            sendSuccesResponse(response);
+            //sendSuccesResponse(response);
         }
         catch(Exception e)
         {
@@ -155,14 +171,14 @@ public class ThingsplayConfig
     }
 
     public String url;
-    bool enable;
+    bool test;
 
-    [XmlAttribute("enable")]
-    public bool Enable
+    [XmlAttribute("test")]
+    public bool Test
     {
-        get { return enable; }
+        get { return test; }
         set
-        { enable = value; }
+        { test = value; }
     }
 
     [XmlAttribute("url")]
@@ -171,6 +187,31 @@ public class ThingsplayConfig
         get { return url; }
         set
         { url = value; }
+    }
+}
+
+public class WebClientWithResponse : WebClient
+{
+    // we will store the response here. We could store it elsewhere if needed.
+    // This presumes the response is not a huge array...
+    public byte[] Response { get; private set; }
+
+    protected override WebResponse GetWebResponse(WebRequest request)
+    {
+        var response = base.GetWebResponse(request);
+        var httpResponse = response as HttpWebResponse;
+        if (httpResponse != null)
+        {
+            using (var stream = httpResponse.GetResponseStream())
+            {
+                using (var ms = new MemoryStream())
+                {
+                    stream.CopyTo(ms);
+                    Response = ms.ToArray();
+                }
+            }
+        }
+        return response;
     }
 }
 

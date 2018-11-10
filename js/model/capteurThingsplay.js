@@ -51,17 +51,20 @@ define([
 						formData.append('file', this.data.attachment.file);
 						
 						$.ajax({
-							url: "http://ecms.ugr.be:8080/bewapp/add-details",
+							url: "thingsplay.ashx",
 							type: "POST",
 							headers: {
-								'Device-ID':'000000000000001',//this.data.barCode.code,
+								'Device-ID':this.data.barCode.code,
 								'Device-Loc':mapPoint.y.toString().replace(".",",")+";"+mapPoint.x.toString().replace(".",",")
 							},
 							data: formData,
 							processData: false,
 							contentType: false,
 							success: function (res) {
-								resolve();
+							    if (res == '"CREATED"')
+							        resolve();
+							    else
+							        reject("Erreur add thingsplay ("+res+")");
 							},
 							error:function(error){
 								reject(error);
